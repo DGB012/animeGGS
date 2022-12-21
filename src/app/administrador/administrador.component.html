@@ -1,0 +1,53 @@
+<cargando></cargando>
+<section class="anime-details spad">
+    <div class="container">
+        <div>
+            <form action="#">
+                <!--<div class="input__item">
+                    <input name="user" type="email" placeholder="Dirección de correo">
+                    <span class="icon_mail"></span>
+                </div>
+                <div class="input__item">
+                    <input name="pass" type="password" placeholder="Contraseña">
+                    <span class="icon_lock"></span>
+                </div>-->
+                <h5>Nombre:</h5>
+                <div class="input">
+                    <input class="prueba" name="nombre" type="text" [(ngModel)]="nombre">
+                </div><br>
+                <h5>Estudio:</h5>
+                <div class="input">
+                    <input class="prueba" name="estudio" type="text" [(ngModel)]="estudio">
+                </div><br>
+                <h5>Descripción:</h5>
+                <div class="input">
+                    <input class="prueba" name="descripcion" type="text" [(ngModel)]="descripcion">
+                </div><br>
+                <h5>Géneros: (Separados por comas)</h5>
+                <div class="input">
+                    <input class="prueba" name="generos" type="text" [(ngModel)]="generos">
+                </div><br>
+                <h5>Tipo: (Película o Serie)</h5>
+                <div class="input">
+                    <input class="prueba" name="tipo" type="text" [(ngModel)]="tipo">
+                </div><br>
+                <h5>Subir carátula:</h5>
+                <input class="subirArchivo" type="file" accept=".png, .jpg, .jpeg, .jfif"
+                    (change)="seleccionaArchivo($event,'Caratulas')"><button (click)="subir('Caratulas')">Subir
+                    Caratula</button><br><br>
+                <h5>Subir fondo apaisado:</h5>
+                <input class="subirArchivo" type="file" accept=".png, .jpg, .jpeg, .jfif"
+                    (change)="seleccionaArchivo($event,'Fondos')">
+                <button (click)="subir('Fondos')">Subir Fondo</button><br><br>
+                <div class="anime__details__form">
+                    <form action="#">
+                        <h5>Episodios: (Separa los episodios por saltos de línea)</h5>
+                        <textarea placeholder="Sube tantos episodios de mega o yourupload embebidos como quieras"
+                            [(ngModel)]="episodios" name="episodios"></textarea>
+                    </form>
+                    <button (click)="prueba()">Subir anime</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

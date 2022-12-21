@@ -1,0 +1,73 @@
+<header class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="header__logo">
+                    <a class="enlace" (click)="navegar()">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/animedgb.appspot.com/o/logo_ggs.png?alt=media&token=6a9c9ab5-7667-4e3a-a99e-de5eb03bca6a"
+                            alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="header__nav">
+                    <nav class="header__menu mobile-menu">
+                        <ul>
+                            <li *ngIf="esAdmin" class="active"><a class="enlace" (click)="navegarAdmin()">Admin</a></li>
+                            <li class="active"><a class="enlace" (click)="navegar()">Página de Inicio</a></li>
+                            <li><a class="titulo" (click)="verGeneros()">Generos<span
+                                        class="arrow_carrot-down"></span></a>
+                                <ul class="dropdown">
+                                    <li *ngFor="let categoria of categorias"><a
+                                            (click)="mostrarCategoria(categoria)">{{categoria}}</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="header__right">
+                    <a (click)="setBuscador()" class="search-switch"><span class="icon_search"></span></a>
+                    <a *ngIf="sesion == 0" (click)="login()" title="Login"><span class="icon_profile"></span></a>
+                    <a *ngIf="sesion == 1" (click)="logout()"><span class="icon_exit" title="Cerrar sesion"></span></a>
+                    <!--<a [ngClass]="{'icon_exit': sesion == 1, 'icon_profile': sesion == 0}" (click)="logout()"></a>-->
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu-wrap">
+            <div class="slicknav_menu">
+                <a (click)="setMenu()" aria-haspopup="true" role="button" tabindex="0" class="slicknav_btn"
+                    [ngClass]="{'slicknav_collapse': !mostrarMenu, 'slicknav_open': mostrarMenu}"
+                    style="outline: none;"><span class="slicknav_menutxt">MENU</span><span class="slicknav_icon"><span
+                            class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span><span
+                            class="slicknav_icon-bar"></span></span></a>
+                <nav class="slicknav_nav dropdown" [ngClass]="{'slicknav_hidden': !mostrarMenu}" role="menu">
+                    <ul>
+                        <li class="active"><a class="enlace" (click)="navegar()">Página de Inicio</a></li>
+                        <li *ngIf="esAdmin" class="active"><a class="enlace" (click)="navegarAdmin()">Admin</a></li>
+                        <li class="slicknav_parent" [ngClass]="{'slicknav_collapse': !mostrarCategorias}"><a
+                                role="menuitem" aria-haspopup="true" tabindex="-1" class="slicknav_item slicknav_row"
+                                style="outline: none;"><a class="enlace" (click)="verGeneros()">Generos</a>
+                                <span (click)="setMenuCategorias()">{{flecha}}</span></a>
+                            <ul class="dropdown" [ngClass]="{'slicknav_hidden': !mostrarCategorias}" role="menu">
+                                <li role="menuitem" *ngFor="let categoria of categorias"><a
+                                        (click)="mostrarCategoria(categoria)" class="categoria">{{categoria}}</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="search-model" [ngClass]="{'display-block': mostrarBuscador }">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="search-close-switch" (click)="setBuscador()"><i class="icon_close"></i></div>
+                <form class="search-model-form">
+                    <input [(ngModel)]="busqueda" name="busqueda" type="text" id="search-input"
+                        placeholder="Search here....." (keydown)="EnterSubmit($event)"><span (click)="buscarAnime()"
+                        class="icon_search"></span>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>

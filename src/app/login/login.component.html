@@ -1,0 +1,43 @@
+<cargando></cargando>
+<section class="login spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login__form">
+                    <h3>Iniciar Sesion</h3>
+                    <form action="#">
+                        <div class="input__item">
+                            <input [(ngModel)]="user" name="user" type="email" placeholder="Dirección de correo">
+                            <span class="icon_mail"></span>
+                        </div>
+                        <div class="input__item">
+                            <input [(ngModel)]="pass" name="pass" type="password" placeholder="Contraseña">
+                            <span class="icon_lock"></span>
+                        </div>
+                        <button (click)="iniciarSesion()" type="submit" class="site-btn">Iniciar ahora</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login__register">
+                    <h3>¿Todavía No Tienes Cuenta?</h3>
+                    <a (click)="registrarse()" class="site-btn">Registrar Ahora</a>
+                </div>
+            </div>
+        </div>
+        <div class="login__social">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6">
+                    <div class="login__social__links">
+                        <span>or</span>
+                        <ul>
+                            <!--<li><a (click)="servicio.FacebookAuth()" class="facebook"><i class="fa fa-facebook"></i>Inicia sesión con Facebook</a></li>-->
+                            <li><a (click)="servicio.GoogleAuth()" class="google"><i class="fa fa-google"></i>Inicia
+                                    sesión con Google</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

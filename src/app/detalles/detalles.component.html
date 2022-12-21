@@ -1,0 +1,97 @@
+<cargando></cargando>
+<section class="anime-details spad" *ngIf="anime">
+    <div class="container">
+        <div class="anime__details__content">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="anime__details__pic set-bg" style="background-image: url('{{anime.caratula}}')"></div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="anime__details__text">
+                        <div class="anime__details__title">
+                            <h3>{{anime.nombre}}</h3>
+                        </div>
+                        <p>{{anime.descripcion}}</p>
+                        <div class="anime__details__widget">
+                            <div class="row">
+                                <div>
+                                    <ul>
+                                        <li><span>Tipo:</span>{{anime.tipo}}</li>
+                                        <li><span>Estudio:</span>{{anime.estudio}}</li>
+                                        <li><span>Estado:</span>{{anime.estado}}</li>
+                                        <li><span>Generos:</span>{{anime.generos}}</li>
+                                        <li><span>Episodios:</span>{{anime.episodios.length}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="anime__details__btn">
+                            <a (click)="seguirAnime()" class="follow-btn"><i class="fa"
+                                    [ngClass]="{'fa-heart-o':!siguiendo,'fa-heart':siguiendo}"></i> {{txtSiguiendo}}</a>
+                            <a (click)="navegar(1)" class="watch-btn"><span>Empezar a ver</span> <i
+                                    class="fa fa-angle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8">
+                <div class="anime__details__episodes">
+                    <div class="section-title">
+                        <h5>Lista de episodios</h5>
+                    </div>
+                    <a *ngFor="let ep of episodios;let i = index" [ngClass]="{'episodiosVistos':ep}"
+                        href="ver/{{anime.nombre}}/{{i+1}}">Ep {{i+1}}</a>
+                </div>
+                <!--Seccion comentarios-->
+                <div class="anime__details__review">
+                    <div class="section-title">
+                        <h5>Opiniones</h5>
+                    </div>
+                    <div *ngFor="let co of comentarios;let g = index" class="anime__review__item">
+                        <div *ngIf="mismoUsuario(co.usuario)" class="tabla">
+                            <div class="anime__review__item__text col-lg-11">
+                                <h6>{{co.usuario.slice(0,1)+co.usuario.slice(2,3) | uppercase}}</h6>
+                                <p>{{co.comentario}}</p>
+                            </div>
+                            <button class="botonBorrar col-lg-1 fa fa-trash-o" (click)="borrarComentario(g+1)"
+                                title="Borrar comentario"></button>
+                        </div>
+                        <div *ngIf="!mismoUsuario(co.usuario)" class="anime__review__item__text">
+                            <h6>{{co.usuario.slice(0,1)+co.usuario.slice(2,3) | uppercase}}</h6>
+                            <p>{{co.comentario}}</p>
+                        </div>
+                    </div>
+                    <div *ngIf="!comentarios">
+                        <div class="anime__review__item__text" style="text-align: center;">
+                            <h5>Todavia no hay comentarios</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="anime__details__form">
+                    <div class="section-title">
+                        <h5>Comenta aquí</h5>
+                    </div>
+                    <form action="#">
+                        <textarea class="comentario" placeholder="Escribe algo..." [(ngModel)]="coment"
+                            name="coment"></textarea>
+                        <button type="submit" (click)="opinar()"><i class="fa fa-location-arrow"></i> Opininar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="anime__details__sidebar">
+                    <div class="section-title">
+                        <h5>Recomendaciones</h5>
+                    </div>
+                    <div class="product__sidebar__view__item set-bg" *ngFor="let item of animesRandom"
+                        style="background-image: url('{{item.img}}')" (click)="navegarRecomendacion(item.nombre)">
+                        <div class="ep">{{item.episodios.length}}</div>
+                        <h5><a>{{item.nombre}}</a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

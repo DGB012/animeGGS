@@ -1,0 +1,62 @@
+.Episodes {
+    border: 1px solid #e53637;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+.Svg-ic {
+    display: inline-flex;
+    align-self: center;
+    position: relative;
+    height: 1em;
+    width: 1em;
+}
+
+.Episodes a.Prev,
+.Episodes a.Next {
+    position: absolute;
+    height: 2.5rem;
+    width: 2.5rem;
+    font-size: 1.5rem;
+}
+
+.Episodes a.Next {
+    right: 0;
+    border-left: 1px solid #e53637;
+    padding-right: 8px;
+}
+
+.Episodes a.Prev {
+    left: 0;
+    border-right: 1px solid #e53637;
+    padding-left: 8px;
+}
+
+.Episodes a {
+    color: #e53637;
+    display: inline-block;
+    line-height: 2.5rem;
+    padding: 0 .5rem;
+    vertical-align: top;
+}
+
+.visto {
+    border-radius: 20px;
+    border: 1px solid #e53637;
+    color: #e53637;
+    line-height: 2rem;
+    padding: 0 .5rem;
+    vertical-align: top;
+    background-color: transparent;
+    float: right;
+}
+
+.episodiosVistos {
+    background-color: #e53637;
+}

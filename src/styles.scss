@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@import "assets/sass/variable";
+@import "assets/sass/mixins";
+@import "assets/sass/base";
+@import "assets/sass/header";
+@import "assets/sass/hero";
+@import "assets/sass/product";
+@import "assets/sass/anime-details";
+@import "assets/sass/anime-watching";
+@import "assets/sass/breadcrumb";
+@import "assets/sass/blog";
+@import "assets/sass/blog-details";
+@import "assets/sass/login";
+@import "assets/sass/signup";
+@import "assets/sass/footer";
+@import "assets/sass/responsive";

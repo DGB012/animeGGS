@@ -1,0 +1,33 @@
+<cargando></cargando>
+<section class="signup spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login__form">
+                    <h3>Registro</h3>
+                    <form action="#">
+                        <div class="input__item">
+                            <input [(ngModel)]="user" name="user" type="email" placeholder="Dirección de correo">
+                            <span class="icon_mail"></span>
+                        </div>
+                        <div class="input__item">
+                            <input [(ngModel)]="pass" name="pass" type="password" placeholder="Contraseña">
+                            <span class="icon_lock"></span>
+                        </div>
+                        <button (click)="registrarse()" type="submit" class="site-btn">Iniciar ahora</button>
+                    </form>
+                    <h5>¿Ya tienes cuenta? <a (click)="iniciarSesion()">¡Inicia Sesión!</a></h5>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login__social__links">
+                    <h3>Registro con:</h3>
+                    <ul>
+                        <li><a (click)="servicio.GoogleAuth()" class="google"><i class="fa fa-google"></i>Inicia sesión
+                                con Google</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,26 @@
+<section class="hero">
+    <div class="container">
+        <div class="slider">
+            <input type="radio" name="testimonial" id="t-1">
+            <input type="radio" name="testimonial" id="t-2">
+            <input type="radio" name="testimonial" id="t-3" checked>
+            <input type="radio" name="testimonial" id="t-4">
+            <input type="radio" name="testimonial" id="t-5">
+            <div class="testimonials">
+                <label *ngFor="let anime of animes;index as i" class="item" for="t-{{i+1}}"
+                    title="Haga click en el nombre para ver">
+                    <img src="{{anime.img}}" alt="picture">
+                    <h2 (click)="navegar(anime.nombre)">{{anime.nombre}}</h2>
+                </label>
+
+            </div>
+            <div class="dots">
+                <label for="t-1"></label>
+                <label for="t-2"></label>
+                <label for="t-3"></label>
+                <label for="t-4"></label>
+                <label for="t-5"></label>
+            </div>
+        </div>
+    </div>
+</section>
