@@ -1,0 +1,43 @@
+<cargando></cargando>
+<section class="product spad" *ngIf="puedeCargar">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="trending__product" *ngFor="let tipo of animesUsuario;index as i">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-8">
+                            <div class="section-title">
+                                <h4 *ngIf="tipo.modo == 'visualizaciones'">Seguir viendo</h4>
+                                <h4 *ngIf="tipo.modo == 'siguiendo'">Siguiendo</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <div class="btn__all">
+                                <a (click)="mostrarModo(tipo.modo)" class="primary-btn verMas">Ver todos<span
+                                        class="arrow_right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let anime of tipo.animes;index as i"
+                            (click)="navegar(anime.nombre)">
+                            <div class="product__item" *ngIf="i<4">
+                                <div class="product__item__pic set-bg"
+                                    style="background-image: url('{{anime.caratula}}')">
+                                    <div class="ep">{{anime.episodios.length}}</div>
+                                </div>
+                                <div class="product__item__text">
+                                    <ul>
+                                        <li>{{anime.estado}}</li>
+                                        <li>{{anime.tipo}}</li>
+                                    </ul>
+                                    <h5><a>{{anime.nombre}}</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

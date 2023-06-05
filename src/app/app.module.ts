@@ -25,6 +25,9 @@ import { GenerosComponent } from './generos/generos.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { SafePipe } from './safe.pipe';
+import { UsuarioComponent } from './usuario/usuario.component';
+import { UsuarioViendoComponent } from './usuario-viendo/usuario-viendo.component';
+import { UsuarioSiguiendoComponent } from './usuario-siguiendo/usuario-siguiendo.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,10 @@ import { SafePipe } from './safe.pipe';
     GenerosComponent,
     LoginComponent,
     SignupComponent,
-    SafePipe
+    SafePipe,
+    UsuarioComponent,
+    UsuarioViendoComponent,
+    UsuarioSiguiendoComponent
   ],
   imports: [
     BrowserModule,

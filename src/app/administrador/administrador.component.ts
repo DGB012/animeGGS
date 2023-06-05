@@ -98,7 +98,6 @@ export class AdministradorComponent implements OnInit {
     }, 2000);
 
     setTimeout(() => {
-      console.log(newAnime);
       this.service.editAnime(newAnime);
     }, 3000);
     

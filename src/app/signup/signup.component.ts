@@ -10,13 +10,17 @@ import { DatabaseAnimeService } from '../database-anime.service';
 export class SignupComponent implements OnInit {
   public user: any;
   public pass: any;
+  public key: any
 
-  constructor(private router: Router, public servicio: DatabaseAnimeService) { }
+  constructor(private service: DatabaseAnimeService, private router: Router, public servicio: DatabaseAnimeService) { }
 
   ngOnInit(): void {
     if (sessionStorage.length == 1) {
       history.go(-2);
     }
+    this.service.getUsers().subscribe((res) => {
+      this.key = res.length+"";
+    });
   }
 
   iniciarSesion() {

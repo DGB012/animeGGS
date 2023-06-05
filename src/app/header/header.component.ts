@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatabaseAnimeService } from '../database-anime.service';
 
 @Component({
@@ -20,8 +20,9 @@ export class HeaderComponent implements OnInit {
   public flecha = "►";
   public admin: any;
   public esAdmin = false;
+  public pc = true;
 
-  constructor(private service: DatabaseAnimeService, private ruta: ActivatedRoute, private router: Router) { }
+  constructor(private service: DatabaseAnimeService, private router: Router) { }
 
   public sesion: any;
 
@@ -36,6 +37,7 @@ export class HeaderComponent implements OnInit {
       this.compruebaCategorias();
       this.compruebaAdmin();
     });
+    if (window.innerWidth <= 990) { this.pc = false }
   }
 
   compruebaCategorias() {
@@ -93,6 +95,12 @@ export class HeaderComponent implements OnInit {
     this.mostrarMenu = false;
     this.mostrarCategorias = false;
     this.router.navigate(["inicio"]);
+  }
+
+  mostrarUsuario() {
+    this.mostrarMenu = false;
+    this.mostrarCategorias = false;
+    this.router.navigate(["usuario"]);
   }
 
   setMenu() {

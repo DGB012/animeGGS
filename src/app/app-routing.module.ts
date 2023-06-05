@@ -10,6 +10,9 @@ import { SignupComponent } from './signup/signup.component';
 import { ErrorComponent } from './error/error.component';
 import { AdministradorComponent } from './administrador/administrador.component';
 import { BusquedaComponent } from './busqueda/busqueda.component';
+import { UsuarioComponent } from './usuario/usuario.component';
+import { UsuarioViendoComponent } from './usuario-viendo/usuario-viendo.component';
+import { UsuarioSiguiendoComponent } from './usuario-siguiendo/usuario-siguiendo.component';
 
 const routes: Routes = [
   { path: '', redirectTo: "inicio", pathMatch: "full" },
@@ -19,6 +22,9 @@ const routes: Routes = [
   { path: 'generos', component: GenerosComponent },
   { path: 'generos/:genero', component: GeneroComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'usuario/visualizaciones', component: UsuarioViendoComponent },
+  { path: 'usuario/siguiendo', component: UsuarioSiguiendoComponent },
+  { path: 'usuario', component: UsuarioComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'buscar/:busqueda', component: BusquedaComponent },
   { path: 'admin', component: AdministradorComponent },

@@ -4,12 +4,27 @@ import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/datab
 import { anime } from './interfaces/anime';
 import { map } from 'rxjs/operators';
 import { GoogleAuthProvider, FacebookAuthProvider, TwitterAuthProvider } from 'firebase/auth';
+import { user } from './interfaces/user';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class DatabaseAnimeService {
+  private newUser = {
+    "nick": "",
+    "correo": "",
+    "siguiendo": [{
+      "serie": ""
+    }
+    ],
+    "visualizaciones": [
+      {
+        "serie": "",
+        "epVistos": ""
+      }
+    ]
+  };
 
   constructor(
     private afAuth: AngularFireAuth, private animesDB: AngularFireDatabase) { }
@@ -48,11 +63,12 @@ export class DatabaseAnimeService {
 
     this.afAuth.createUserWithEmailAndPassword(email, password)
       .then(value => {
+        this.newUser.correo = email;
+        this.aniadirUsuario(this.newUser);
         sessionStorage.setItem('usuario', email);
         window.location.assign("inicio");
       })
       .catch(error => {
-        //console.log(error.message);
         const errCorreoEnUso = "Firebase: The email address is already in use by another account. (auth/email-already-in-use).";
         if (error.message == errCorreoEnUso) {
           window.alert("El correo introducido ya está en uso por otra cuenta");
@@ -70,18 +86,15 @@ export class DatabaseAnimeService {
   TwitterAuth() {
     return this.AuthLogin(new TwitterAuthProvider());
   }
-  // Auth logic to run auth providers
   AuthLogin(provider: any) {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        //console.log('You have been successfully logged in!');
         let email = result.user?.email;
         sessionStorage.setItem('usuario', email!);
         window.location.assign("inicio");
       })
       .catch((error) => {
-        //console.log(error);
       });
   }
 
@@ -113,6 +126,20 @@ export class DatabaseAnimeService {
     );
   }
 
+  getUsers() {
+    var ns: AngularFireList<user> = this.animesDB.list("/users", (ref) =>
+      ref.orderByKey()
+    )
+    return ns.snapshotChanges().pipe(
+      map((changes) => {
+        return changes.map((c) => ({
+          $key: c.payload.key,
+          ...c.payload.val(),
+        }));
+      })
+    );
+  }
+
 
   editAnime(animeMod: any) {
     const $key = animeMod.$key;
@@ -123,5 +150,15 @@ export class DatabaseAnimeService {
   subirAnime(anime: any) {
     const $key = anime.$key;
     this.animesDB.list('/animes').update($key, anime);
+  }
+
+  aniadirUsuario(user: any) {
+    this.animesDB.list('/users').push(user);
+  }
+
+  editUsuario(user: any) {
+    const $key = user.$key;
+    delete user.$key;
+    this.animesDB.list('/users').update($key, user);
   }
 }

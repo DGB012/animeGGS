@@ -113,10 +113,70 @@
 
         &:last-child {
             margin-right: 0;
+        }&.active {
+
+            a {
+                background: $primary-color;
+                color: $white-color;
+            }
         }
+
+        &:hover {
+
+            a {
+                // background: $primary-color;
+                color: $white-color;
+            }
+
+            .dropdown {
+                top: 48px;
+                opacity: 1;
+                visibility: visible;
+
+                li {
+
+                    a {
+                        background: transparent;
+                    }
+                }
+            }
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        .dropdown {
+            position: absolute;
+            left: 110px;
+            top: 82px;
+            width: 128px;
+            background: $white-color;
+            text-align: left;
+            padding: 5px 0;
+            z-index: 9;
+            opacity: 0;
+            visibility: hidden;
+            @include transition(all, .3s);
+
+            li {
+                display: block;
+                margin-right: 0;
+
+                a {
+                    font-size: 14px;
+                    color: $heading-color;
+                    font-weight: 500;
+                    padding: 5px 20px;
+                }
+            }
+        }
+
     }
+
+    
 }
 
 .slicknav_menu {
     display: none;
-  }
+}

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatabaseAnimeService } from '../database-anime.service';
-import { episodios } from '../interfaces/episodios';
 
 @Component({
   selector: 'app-episodios',
@@ -12,6 +11,8 @@ export class EpisodiosComponent implements OnInit {
 
   public anime: any;
   public animes: any;
+  public user: any;
+  public episodiosVistos: any;
   public idAnime: any;
   public episodio: number = 0;
   public enlace: any;
@@ -26,13 +27,21 @@ export class EpisodiosComponent implements OnInit {
     this.ruta.params.subscribe(params => {
       this.idAnime = params['anime'];
       this.episodio = parseInt(params['episodio']);
-      this.service.getJson().subscribe((res) => {
-        this.animes = res;
-        this.compruebaAnime();
-        this.compruebaRutaCorrecta();
-        this.enlace = this.anime.episodios[this.episodio - 1].ep;
+
+      this.service.getUsers().subscribe((users) => {
+        for (let i = 0; i < users.length; i++) {
+          if (sessionStorage.getItem("usuario") == users[i].correo) {
+            this.user = users[i];
+          }
+          this.service.getJson().subscribe((res) => {
+            this.animes = res;
+            this.compruebaAnime();
+            this.compruebaRutaCorrecta();
+            this.enlace = this.anime.episodios[this.episodio - 1].ep;
+          });
+        }
       });
-    })
+    });
   }
 
   compruebaRutaCorrecta() {
@@ -46,26 +55,74 @@ export class EpisodiosComponent implements OnInit {
       if (this.idAnime == this.animes[i].nombre) {
         this.anime = this.animes[i];
         this.posicionAnime = i;
-        if (sessionStorage.length == 1) {
-          for (let f = 0; f < this.animes[i].episodios[this.episodio - 1].usuariosVisto.length; f++) {
-            if (sessionStorage.getItem("usuario") == this.animes[i].episodios[this.episodio - 1].usuariosVisto[f]) {
-              this.visto = true;
-              this.txtVisto = "Marcar como no visto";
+      }
+    }
+
+    if (sessionStorage.length == 1) {
+      let existeVisualizacion = false;
+      for (let g = 0; g < this.user.visualizaciones.length; g++) {
+        if (this.user.visualizaciones[g].serie == this.anime.nombre) {
+          existeVisualizacion = true;
+          this.episodiosVistos = this.user.visualizaciones[g].epVistos.split(",");
+          if (this.episodiosVistos.length == 1 &&
+            this.episodiosVistos[0] == ''
+          ) {
+          }
+          else {
+            for (let r = 0; r < this.episodiosVistos.length; r++) {
+              if (this.episodiosVistos[r] == (this.episodio - 1)) {
+                this.visto = true;
+                this.txtVisto = "Marcar como no visto";
+              }
+              else {
+                this.visto = false;
+                this.txtVisto = "Marcar como visto";
+              }
             }
           }
         }
       }
-    }
-    this.episodios = [];
-    for (let f = 0; f < this.animes[this.posicionAnime].episodios.length; f++) {
-      let esta = false
-      for (let g = 0; g < this.animes[this.posicionAnime].episodios[f].usuariosVisto.length; g++) {
-        if (sessionStorage.getItem("usuario") == this.animes[this.posicionAnime].episodios[f].usuariosVisto[g]) {
-          esta = true;
-        }
+
+      if (!existeVisualizacion) {
+        this.user.visualizaciones.push({
+          "serie": this.anime.nombre,
+          "epVistos": ""
+        });
+        this.visto = false;
+        this.txtVisto = "Marcar como visto";
+        this.service.editUsuario(this.user);
+        existeVisualizacion = true;
       }
-      this.episodios.push(esta)
+
+      this.episodios = [];
+      for (let f = 0; f < this.animes[this.posicionAnime].episodios.length; f++) {
+        let esta = false
+        for (let g = 0; g < this.user.visualizaciones.length; g++) {
+          if (this.user.visualizaciones[g].serie == this.anime.nombre) {
+
+            for (let h = 0; h < this.episodiosVistos.length; h++) {
+              if (this.episodiosVistos.length == 1 &&
+                this.episodiosVistos[0] == ''
+              ) { }
+              else {
+                if (f == this.episodiosVistos[h]) {
+                  esta = true;
+                }
+              }
+            }
+          }
+        }
+
+        this.episodios.push(esta);
+      }
+    } else {
+      this.episodios = [];
+      for (let f = 0; f < this.animes[this.posicionAnime].episodios.length; f++) {
+        this.episodios.push(false);
+      }
     }
+
+
   }
 
   cambiarEpisodio(num: number) {
@@ -77,6 +134,39 @@ export class EpisodiosComponent implements OnInit {
   }
 
   marcarVisto() {
+    if (sessionStorage.length == 0) {
+      window.alert("Necesitas iniciar sesion primero")
+    } else if (sessionStorage.length == 1) {
+      this.user.visualizaciones = this.user.visualizaciones.filter((obj: { serie: any; }) => obj.serie !== this.anime.nombre);
+      if (this.visto === true) {
+        this.txtVisto = "Marcar como visto";
+        this.visto = false
+        let epVistos = [];
+        for (let f = 0; f < this.episodiosVistos.length; f++) {
+          if (this.episodiosVistos[f] != (this.episodio - 1)) {
+            epVistos.push(this.episodiosVistos[f]);
+          }
+        }
+        this.user.visualizaciones.push({
+          "serie": this.anime.nombre,
+          "epVistos": epVistos.toString()
+        });
+
+      } else {
+        this.txtVisto = "Marcar como no visto";
+        this.visto = true;
+        this.user.visualizaciones = this.user.visualizaciones.filter((obj: { serie: any; }) => obj.serie !== this.anime.nombre);
+        this.episodiosVistos.push(this.episodio - 1);
+        this.user.visualizaciones.push({
+          "serie": this.anime.nombre,
+          "epVistos": this.episodiosVistos.filter((str: string) => str !== '').toString()
+        });
+      }
+      this.service.editUsuario(this.user);
+
+    }
+  }
+  marcarVisto2() {
     if (sessionStorage.length == 0) {
       window.alert("Necesitas iniciar sesion primero")
     } else if (sessionStorage.length == 1) {

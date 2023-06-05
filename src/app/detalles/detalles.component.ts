@@ -11,6 +11,7 @@ export class DetallesComponent implements OnInit {
 
   public anime: any;
   public animes: any;
+  public user: any;
   public animesRandom: any;
   public idAnime: any;
   public siguiendo = false;
@@ -25,17 +26,25 @@ export class DetallesComponent implements OnInit {
   ngOnInit(): void {
     this.ruta.params.subscribe(params => {
       this.idAnime = params['anime'];
-      this.service.getJson().subscribe((res) => {
-        this.animes = res;
+      this.service.getUsers().subscribe((users) => {
+        for (let i = 0; i < users.length; i++) {
+          if (sessionStorage.getItem("usuario") == users[i].correo) {
+            this.user = users[i];
+          }
+          this.service.getJson().subscribe((res) => {
+            this.animes = res;
 
-        this.animesRandom = [];
-        for (let i = 0; i < this.animes.length; i++) {
-          this.animesRandom.push(this.animes[i]);
+            this.animesRandom = [];
+            for (let i = 0; i < this.animes.length; i++) {
+              this.animesRandom.push(this.animes[i]);
+            }
+            fisherYatesShuffle(this.animesRandom);
+            this.animesRandom = this.animesRandom.splice(0, 2);
+            this.compruebaAnime();
+          });
         }
-        fisherYatesShuffle(this.animesRandom);
-        this.animesRandom = this.animesRandom.splice(0, 2);
-        this.compruebaAnime();
-      });
+      })
+
     })
   }
 
@@ -44,26 +53,55 @@ export class DetallesComponent implements OnInit {
       if (this.idAnime == this.animes[i].nombre) {
         this.anime = this.animes[i];
         this.posicionAnime = i;
-        if (sessionStorage.length == 1) {
-          for (let f = 0; f < this.animes[i].siguiendo.length; f++) {
-            if (sessionStorage.getItem("usuario") == this.animes[i].siguiendo[f]) {
-              this.siguiendo = true;
-              this.txtSiguiendo = "Siguiendo";
+      }
+    }
+    if (this.user) {
+      for (let g = 0; g < this.user.siguiendo.length; g++) {
+        if (this.user.siguiendo[g].serie == this.anime.nombre) {
+          this.siguiendo = true;
+          this.txtSiguiendo = "Siguiendo";
+        }
+      }
+
+      let existeVisualizacion = false;
+      for (let g = 0; g < this.user.visualizaciones.length; g++) {
+        if (this.user.visualizaciones[g].serie == this.anime.nombre) {
+          existeVisualizacion = true;
+        }
+      }
+      if (!existeVisualizacion) {
+        this.user.visualizaciones.push({
+          "serie": this.anime.nombre,
+          "epVistos": ""
+        })
+        this.service.editUsuario(this.user);
+      }
+      this.episodios = [];
+      for (let f = 0; f < this.animes[this.posicionAnime].episodios.length; f++) {
+        let esta = false
+        for (let g = 0; g < this.user.visualizaciones.length; g++) {
+          if (this.user.visualizaciones[g].serie == this.anime.nombre) {
+            for (let h = 0; h < this.user.visualizaciones[g].epVistos.split(",").length; h++) {
+              if (this.user.visualizaciones[g].epVistos.split(",").length == 1 &&
+                this.user.visualizaciones[g].epVistos.split(",")[0] == ''
+              ) { } else {
+                if (f == this.user.visualizaciones[g].epVistos.split(",")[h]) {
+                  esta = true;
+                }
+              }
             }
           }
         }
+
+        this.episodios.push(esta);
+      }
+    } else {
+      this.episodios = [];
+      for (let f = 0; f < this.animes[this.posicionAnime].episodios.length; f++) {
+        this.episodios.push(false);
       }
     }
-    this.episodios = [];
-    for (let f = 0; f < this.animes[this.posicionAnime].episodios.length; f++) {
-      let esta = false
-      for (let g = 0; g < this.animes[this.posicionAnime].episodios[f].usuariosVisto.length; g++) {
-        if (sessionStorage.getItem("usuario") == this.animes[this.posicionAnime].episodios[f].usuariosVisto[g]) {
-          esta = true;
-        }
-      }
-      this.episodios.push(esta)
-    }
+
     if (this.anime.comentarios.length > 1) {
       this.comentarios = this.anime.comentarios.slice(1, this.anime.comentarios.length);
     }
@@ -76,20 +114,15 @@ export class DetallesComponent implements OnInit {
       if (this.siguiendo === true) {
         this.txtSiguiendo = "Seguir";
         this.siguiendo = false
-        let usuarios = [];
-        for (let f = 0; f < this.animes[this.posicionAnime].siguiendo.length; f++) {
-          if (sessionStorage.getItem("usuario") != this.animes[this.posicionAnime].siguiendo[f]) {
-            usuarios.push(this.animes[this.posicionAnime].siguiendo[f]);
-          }
-        }
-        this.animes[this.posicionAnime].siguiendo = usuarios;
-        this.service.editAnime(this.animes[this.posicionAnime]);
+        this.user.siguiendo = this.user.siguiendo.filter((obj: { serie: any; }) => obj.serie !== this.anime.nombre);
       } else {
         this.txtSiguiendo = "Siguiendo";
         this.siguiendo = true;
-        this.animes[this.posicionAnime].siguiendo.push(sessionStorage.getItem("usuario"));
-        this.service.editAnime(this.animes[this.posicionAnime]);
+        this.user.siguiendo.push({
+          "serie": this.anime.nombre
+        })
       }
+      this.service.editUsuario(this.user);
     }
   }
 
