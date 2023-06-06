@@ -11,3 +11,17 @@ a:hover {
 .product__item__pic {
     cursor: pointer;
 }
+
+.tabla {
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.anime__review__item__text {
+    border-left: 1px solid #e53637;
+}
+
+h5 {
+    color: white;
+}

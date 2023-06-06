@@ -1,0 +1,14 @@
+.nombre {
+    width: 94%;
+    background-color: #0b0c2acc;
+    border-radius: 40px;
+    color: white;
+    text-align: center;
+    position: absolute;
+    left: 10px;
+    top: 150px;
+
+    :hover {
+        color: rgb(203, 220, 235);
+    }
+}
