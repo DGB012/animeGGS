@@ -9,7 +9,7 @@ import { DatabaseAnimeService } from '../database-anime.service';
 })
 export class BusquedaComponent implements OnInit {
   public allAnimes: any;
-  public animes: any;
+  public animesCoincidencias: Array<any> = [];
   public busqueda: any;
   public animesRandom: any;
   constructor(private service: DatabaseAnimeService, private ruta: ActivatedRoute, private router: Router) { }
@@ -19,24 +19,26 @@ export class BusquedaComponent implements OnInit {
       this.busqueda = params['busqueda'];
       this.service.getJson().subscribe((res) => {
         this.allAnimes = res;
-        this.animes = [];
-        for (let i = 0; i < this.allAnimes.length; i++) {
-          this.animes.push(this.allAnimes[i]);
-        }
+        this.animesCoincidencias = [];
+        this.buscarAnimes(this.busqueda);
 
-        this.animesRandom = [];
-        for (let i = 0; i < this.animes.length; i++) {
-          this.animesRandom.push(this.animes[i]);
-        }
+        this.animesRandom = res;
         fisherYatesShuffle(this.animesRandom);
-
-        this.animes = this.animes.sort();
       });
     });
   }
 
   navegar(anime: string) {
     this.router.navigate(["anime/" + anime]);
+  }
+
+  buscarAnimes(busqueda: any) {
+    for (let i = 0; i < this.allAnimes.length; i++) {
+      if (this.allAnimes[i].nombre.toLowerCase().includes(busqueda.toLowerCase())) {
+        this.animesCoincidencias.push(this.allAnimes[i]);
+      }
+    }
+    this.animesCoincidencias = this.animesCoincidencias.sort();
   }
 }
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { DatabaseAnimeService } from '../database-anime.service';
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../header/header.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -11,9 +11,10 @@ import { HeaderComponent } from '../header/header.component';
 export class LoginComponent {
 
   public user: any;
+  public users: any;
   public pass: any;
 
-  constructor(public servicio: DatabaseAnimeService, private router: Router) { }
+  constructor(public servicio: DatabaseAnimeService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     if (sessionStorage.length == 1) {
@@ -23,7 +24,9 @@ export class LoginComponent {
 
   iniciarSesion() {
     if (this.user == undefined) {
-      window.alert("El correo introducido no es válido")
+      this.toastr.error("El correo introducido no es válido", 'Error correo', {
+        positionClass: 'toast-center-center'
+      });
     } else {
       this.servicio.login(this.user, this.pass);
     }

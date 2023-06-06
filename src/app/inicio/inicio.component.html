@@ -34,22 +34,7 @@
             </div>
             <div class="col-lg-4 col-md-6 col-sm-8">
                 <div class="product__sidebar">
-                    <div class="product__sidebar__view">
-                        <div class="section-title">
-                            <h5>Recomendaciones</h5>
-                        </div>
-                        <div class="filter__gallery">
-                            <div *ngFor="let anime of animesRandom;index as i">
-                                <div *ngIf="i<4" class="product__sidebar__view__item set-bg mix day years"
-                                    style="background-image: url('{{anime.img}}')" (click)="navegar(anime.nombre)">
-                                    <div class="ep">{{anime.episodios.length}}</div>
-                                    <div class="nombre">
-                                        <a>{{anime.nombre}}</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <app-aleatorios></app-aleatorios>
                 </div>
             </div>
         </div>

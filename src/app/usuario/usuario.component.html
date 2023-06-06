@@ -3,23 +3,22 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                <div class="trending__product" *ngFor="let tipo of animesUsuario;index as i">
+                <div class="trending__product">
                     <div class="row">
                         <div class="col-lg-8 col-md-8 col-sm-8">
                             <div class="section-title">
-                                <h4 *ngIf="tipo.modo == 'visualizaciones'">Seguir viendo</h4>
-                                <h4 *ngIf="tipo.modo == 'siguiendo'">Siguiendo</h4>
+                                <h4>Seguir viendo</h4>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-4 col-md-4 col-sm-4" *ngIf="hayVistos">
                             <div class="btn__all">
-                                <a (click)="mostrarModo(tipo.modo)" class="primary-btn verMas">Ver todos<span
+                                <a (click)="mostrarModo('visualizaciones')" class="primary-btn verMas">Ver todos<span
                                         class="arrow_right"></span></a>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let anime of tipo.animes;index as i"
+                    <div class="row" *ngIf="hayVistos">
+                        <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let anime of animesVistos;index as i"
                             (click)="navegar(anime.nombre)">
                             <div class="product__item" *ngIf="i<4">
                                 <div class="product__item__pic set-bg"
@@ -33,6 +32,55 @@
                                     </ul>
                                     <h5><a>{{anime.nombre}}</a></h5>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!hayVistos">
+                        <div class="anime__details__review col-lg-12 col-md-12 col-sm-12">
+                            <div class="anime__review__item__text"
+                                style="text-align: center;">
+                                <h5>Todavia no hay animes</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="trending__product">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-8">
+                            <div class="section-title">
+                                <h4>Siguiendo</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4" *ngIf="haySeguidos">
+                            <div class="btn__all">
+                                <a (click)="mostrarModo('siguiendo')" class="primary-btn verMas">Ver todos<span
+                                        class="arrow_right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="haySeguidos">
+                        <div class="col-lg-3 col-md-6 col-sm-6" *ngFor="let anime of animesSeguidos;index as i"
+                            (click)="navegar(anime.nombre)">
+                            <div class="product__item" *ngIf="i<4">
+                                <div class="product__item__pic set-bg"
+                                    style="background-image: url('{{anime.caratula}}')">
+                                    <div class="ep">{{anime.episodios.length}}</div>
+                                </div>
+                                <div class="product__item__text">
+                                    <ul>
+                                        <li>{{anime.estado}}</li>
+                                        <li>{{anime.tipo}}</li>
+                                    </ul>
+                                    <h5><a>{{anime.nombre}}</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="!haySeguidos">
+                        <div class="anime__details__review col-lg-12 col-md-12 col-sm-12">
+                            <div class="anime__review__item__text"
+                                style="text-align: center;">
+                                <h5>Todavia no hay animes</h5>
                             </div>
                         </div>
                     </div>

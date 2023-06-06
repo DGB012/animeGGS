@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatabaseAnimeService } from '../database-anime.service';
-import { anime } from '../interfaces/anime';
 
 @Component({
   selector: 'app-usuario',
@@ -10,7 +9,8 @@ import { anime } from '../interfaces/anime';
 })
 export class UsuarioComponent implements OnInit {
   public usuario: any;
-  public animesUsuario: Array<any> = [];
+  public animesVistos: Array<any> = [];
+  public animesSeguidos: Array<any> = [];
   public puedeCargar = false;
   public hayVistos = false;
   public haySeguidos = false;
@@ -37,32 +37,28 @@ export class UsuarioComponent implements OnInit {
   }
 
   buscarAnimes(animes: any) {
-    let animesViendo: Array<any> = [];
     for (let i = 0; i < this.usuario.visualizaciones.length; i++) {
       for (let g = 0; g < animes.length; g++) {
         if (this.usuario.visualizaciones[i].serie == animes[g].nombre &&
           this.usuario.visualizaciones[i].epVistos.split(",")[0] != "") {
-          animesViendo.push(animes[g]);
+          this.animesVistos.push(animes[g]);
         }
       }
     }
-    this.animesUsuario.push({
-      "modo": "visualizaciones",
-      "animes": animesViendo
-    });
+    if (this.animesVistos.length > 0) {
+      this.hayVistos = true;
+    }
 
-    let animesSiguiendo: Array<any> = [];
     for (let c = 0; c < this.usuario.siguiendo.length; c++) {
       for (let l = 0; l < animes.length; l++) {
         if (this.usuario.siguiendo[c].serie == animes[l].nombre) {
-          animesSiguiendo.push(animes[l]);
+          this.animesSeguidos.push(animes[l]);
         }
       }
     }
-    this.animesUsuario.push({
-      "modo": "siguiendo",
-      "animes": animesSiguiendo
-    });
+    if (this.animesSeguidos.length > 0) {
+      this.haySeguidos = true;
+    }
   }
 
   comprobarVistosYSeguidos() {

@@ -13,7 +13,7 @@ export class CargandoComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.noMostrar = true;
-    }, 1500);
+    }, 1200);
   }
 
 }

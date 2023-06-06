@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatabaseAnimeService } from '../database-anime.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-detalles',
@@ -21,7 +22,7 @@ export class DetallesComponent implements OnInit {
   public coment: any;
   public episodios: Array<any> = [];
 
-  constructor(private service: DatabaseAnimeService, private ruta: ActivatedRoute, private router: Router) { }
+  constructor(private service: DatabaseAnimeService, private ruta: ActivatedRoute, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.ruta.params.subscribe(params => {
@@ -109,7 +110,9 @@ export class DetallesComponent implements OnInit {
 
   seguirAnime() {
     if (sessionStorage.length == 0) {
-      window.alert("Necesitas iniciar sesion primero")
+      this.toastr.warning("Necesitas iniciar sesion primero", 'Seguir', {
+        positionClass: 'toast-center-center'
+      });
     } else if (sessionStorage.length == 1) {
       if (this.siguiendo === true) {
         this.txtSiguiendo = "Seguir";
@@ -128,7 +131,9 @@ export class DetallesComponent implements OnInit {
 
   opinar() {
     if (sessionStorage.length == 0) {
-      window.alert("Necesitas iniciar sesion para poder opinar")
+      this.toastr.warning("Necesitas iniciar sesion primero", 'Opinar', {
+        positionClass: 'toast-center-center'
+      });
     } else {
       var newComent = {
         "usuario": sessionStorage.getItem("usuario"),

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatabaseAnimeService } from '../database-anime.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-episodios',
@@ -21,7 +22,7 @@ export class EpisodiosComponent implements OnInit {
   public posicionAnime: any;
   public episodios: Array<any> = [];
 
-  constructor(private service: DatabaseAnimeService, private ruta: ActivatedRoute, private router: Router) { }
+  constructor(private service: DatabaseAnimeService, private ruta: ActivatedRoute, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.ruta.params.subscribe(params => {
@@ -135,7 +136,9 @@ export class EpisodiosComponent implements OnInit {
 
   marcarVisto() {
     if (sessionStorage.length == 0) {
-      window.alert("Necesitas iniciar sesion primero")
+      this.toastr.warning("Necesitas iniciar sesion primero", 'Marcar como visto dice:', {
+        positionClass: 'toast-center-center'
+      });
     } else if (sessionStorage.length == 1) {
       this.user.visualizaciones = this.user.visualizaciones.filter((obj: { serie: any; }) => obj.serie !== this.anime.nombre);
       if (this.visto === true) {
@@ -164,30 +167,6 @@ export class EpisodiosComponent implements OnInit {
       }
       this.service.editUsuario(this.user);
 
-    }
-  }
-  marcarVisto2() {
-    if (sessionStorage.length == 0) {
-      window.alert("Necesitas iniciar sesion primero")
-    } else if (sessionStorage.length == 1) {
-      if (this.visto === true) {
-        this.txtVisto = "Marcar como visto";
-        this.visto = false
-        let usuarios = [];
-        for (let f = 0; f < this.animes[this.posicionAnime].episodios[this.episodio - 1].usuariosVisto.length; f++) {
-          if (sessionStorage.getItem("usuario") != this.animes[this.posicionAnime].episodios[this.episodio - 1].usuariosVisto[f]) {
-            usuarios.push(this.animes[this.posicionAnime].episodios[this.episodio - 1].usuariosVisto[f]);
-          }
-        }
-        this.animes[this.posicionAnime].episodios[this.episodio - 1].usuariosVisto = usuarios;
-        this.service.editAnime(this.animes[this.posicionAnime]);
-
-      } else {
-        this.txtVisto = "Marcar como no visto";
-        this.visto = true;
-        this.animes[this.posicionAnime].episodios[this.episodio - 1].usuariosVisto.push(sessionStorage.getItem("usuario"));
-        this.service.editAnime(this.animes[this.posicionAnime]);
-      }
     }
   }
 }

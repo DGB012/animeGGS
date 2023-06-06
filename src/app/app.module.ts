@@ -5,6 +5,10 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
@@ -28,6 +32,7 @@ import { SafePipe } from './safe.pipe';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { UsuarioViendoComponent } from './usuario-viendo/usuario-viendo.component';
 import { UsuarioSiguiendoComponent } from './usuario-siguiendo/usuario-siguiendo.component';
+import { AleatoriosComponent } from './aleatorios/aleatorios.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +55,8 @@ import { UsuarioSiguiendoComponent } from './usuario-siguiendo/usuario-siguiendo
     SafePipe,
     UsuarioComponent,
     UsuarioViendoComponent,
-    UsuarioSiguiendoComponent
+    UsuarioSiguiendoComponent,
+    AleatoriosComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +64,9 @@ import { UsuarioSiguiendoComponent } from './usuario-siguiendo/usuario-siguiendo
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     FormsModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

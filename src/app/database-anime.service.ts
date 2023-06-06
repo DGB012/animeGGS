@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
 import { anime } from './interfaces/anime';
-import { map } from 'rxjs/operators';
+import { map, toArray } from 'rxjs/operators';
 import { GoogleAuthProvider, FacebookAuthProvider, TwitterAuthProvider } from 'firebase/auth';
 import { user } from './interfaces/user';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class DatabaseAnimeService {
   };
 
   constructor(
-    private afAuth: AngularFireAuth, private animesDB: AngularFireDatabase) { }
+    private afAuth: AngularFireAuth, private animesDB: AngularFireDatabase, private toastr: ToastrService) { }
 
 
   login(email: string, password: string) {
@@ -44,16 +45,24 @@ export class DatabaseAnimeService {
         const errCorreoErroneo = "Firebase: The email address is badly formatted. (auth/invalid-email).";
         const errCorreoNoEncontrado = "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).";
         if (error.message == errContraseniaVacia) {
-          window.alert("Introduce una contraseña");
+          this.toastr.error("Introduce una contraseña", 'Error contraseña', {
+            positionClass: 'toast-center-center'
+          });
         }
         if (error.message == errContraseniaErronea) {
-          window.alert("Contraseña incorrecta");
+          this.toastr.error("Contraseña incorrecta", 'Error contraseña', {
+            positionClass: 'toast-center-center'
+          });
         }
         if (error.message == errCorreoErroneo) {
-          window.alert("El correo introducido no es válido");
+          this.toastr.error("El correo introducido no es válido", 'Error correo', {
+            positionClass: 'toast-center-center'
+          });
         }
         if (error.message == errCorreoNoEncontrado) {
-          window.alert("No existe ningún usuario con ese correo");
+          this.toastr.error("No existe ningún usuario con ese correo", 'Error correo', {
+            positionClass: 'toast-center-center'
+          });
         }
       });
 
@@ -71,7 +80,9 @@ export class DatabaseAnimeService {
       .catch(error => {
         const errCorreoEnUso = "Firebase: The email address is already in use by another account. (auth/email-already-in-use).";
         if (error.message == errCorreoEnUso) {
-          window.alert("El correo introducido ya está en uso por otra cuenta");
+          this.toastr.error("El correo introducido ya está en uso por otra cuenta", 'Error correo', {
+            positionClass: 'toast-center-center'
+          });
         }
       });
 
@@ -87,10 +98,25 @@ export class DatabaseAnimeService {
     return this.AuthLogin(new TwitterAuthProvider());
   }
   AuthLogin(provider: any) {
+    let users: Array<any> = [];
+    this.getUsers().subscribe((res) => {
+      users = res;
+    })
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
         let email = result.user?.email;
+        let crearUsuario = true;
+          for (let i = 0; i < users.length; i++) {
+            if (email == users[i].correo) {
+              crearUsuario = false;
+              console.log(crearUsuario);
+            }
+          }
+        if(crearUsuario){
+          this.newUser.correo = email!;
+          this.aniadirUsuario(this.newUser);
+        }
         sessionStorage.setItem('usuario', email!);
         window.location.assign("inicio");
       })
