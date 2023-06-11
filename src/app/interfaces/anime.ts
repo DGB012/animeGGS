@@ -7,6 +7,6 @@ export interface anime {
     descripcion: number;
     generos: number;
     tipo: string;
-    estudio: boolean;
+    estudio: string;
     episodios: Array<episodios>
 }
