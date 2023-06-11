@@ -31,7 +31,7 @@ export class AdministradorComponent implements OnInit {
   ngOnInit(): void {
     this.compruebaAdmin();
     this.service.getJson().subscribe((res) => {
-      this.key = res.length+"";
+      this.key = res.length + "";
     });
   }
 
@@ -65,17 +65,14 @@ export class AdministradorComponent implements OnInit {
   }
 
   prueba() {
-    
+
     this.episodios = this.episodios.split("\n");
     var newAnime: any;
     var capitulosJson: any = [];
 
     for (let i = 0; i < this.episodios.length; i++) {
       capitulosJson[i] = {
-        "ep": this.episodios[i],
-        "usuariosVisto": [
-          ""
-        ]
+        "ep": this.episodios[i]
       }
     }
 
@@ -83,15 +80,18 @@ export class AdministradorComponent implements OnInit {
       newAnime = {
         "$key": this.key,
         "caratula": this.caratula,
+        "comentarios": [
+          {
+            "comentario": "",
+            "usuario": ""
+          }
+        ],
         "descripcion": this.descripcion,
         "estado": "Finalizado",
         "estudio": this.estudio,
         "generos": this.generos,
         "img": this.img,
         "nombre": this.nombre,
-        "siguiendo": [
-          ""
-        ],
         "tipo": this.tipo,
         "episodios": capitulosJson
       };
@@ -100,12 +100,12 @@ export class AdministradorComponent implements OnInit {
     setTimeout(() => {
       this.service.editAnime(newAnime);
     }, 3000);
-    
+
 
   }
 
   subir(localizacion: string) {
-    
+
     if (localizacion == "Caratulas") {
       var filePath = localizacion + "/" + this.file[0].name;
       var fileRef = this.storage.ref(filePath);
