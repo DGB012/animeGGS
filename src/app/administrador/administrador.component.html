@@ -27,7 +27,7 @@
                 <div class="input">
                     <input class="prueba" name="generos" type="text" [(ngModel)]="generos">
                 </div><br>
-                <h5>Tipo: (Película o Serie)</h5>
+                <h5>Tipo: (Película, Serie u Ova)</h5>
                 <div class="input">
                     <input class="prueba" name="tipo" type="text" [(ngModel)]="tipo">
                 </div><br>
@@ -45,7 +45,7 @@
                         <textarea placeholder="Sube tantos episodios de mega o yourupload embebidos como quieras"
                             [(ngModel)]="episodios" name="episodios"></textarea>
                     </form>
-                    <button (click)="prueba()">Subir anime</button>
+                    <button (click)="subirAnime()">Subir anime</button>
                 </div>
             </form>
         </div>

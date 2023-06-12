@@ -3,6 +3,8 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { DatabaseAnimeService } from '../database-anime.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-administrador',
@@ -26,7 +28,7 @@ export class AdministradorComponent implements OnInit {
   public key: any
 
   public admin: any;
-  constructor(private service: DatabaseAnimeService, private storage: AngularFireStorage) { }
+  constructor(private service: DatabaseAnimeService, private storage: AngularFireStorage, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.compruebaAdmin();
@@ -64,7 +66,7 @@ export class AdministradorComponent implements OnInit {
 
   }
 
-  prueba() {
+  subirAnime() {
 
     this.episodios = this.episodios.split("\n");
     var newAnime: any;
@@ -99,8 +101,8 @@ export class AdministradorComponent implements OnInit {
 
     setTimeout(() => {
       this.service.editAnime(newAnime);
+      this.router.navigate(["inicio"]);
     }, 3000);
-
 
   }
 
@@ -109,12 +111,15 @@ export class AdministradorComponent implements OnInit {
     if (localizacion == "Caratulas") {
       var filePath = localizacion + "/" + this.file[0].name;
       var fileRef = this.storage.ref(filePath);
-      var task = this.storage.upload(filePath, this.file);
+      var task = this.storage.upload(filePath, this.file[0], { contentType: 'image/jpeg' });
       task.snapshotChanges()
         .pipe(
           finalize(() => {
             fileRef.getDownloadURL().subscribe(downloadURL => {
               this.caratula = downloadURL;
+              this.toastr.success("Se ha subido la caratula correctamente", 'Subir imagen', {
+                positionClass: 'toast-center-center'
+              });
             });
           })
         )
@@ -122,12 +127,15 @@ export class AdministradorComponent implements OnInit {
     } else {
       var filePath = localizacion + "/" + this.file[1].name;
       var fileRef = this.storage.ref(filePath);
-      var task = this.storage.upload(filePath, this.file);
+      var task = this.storage.upload(filePath, this.file[1], { contentType: 'image/jpeg' });
       task.snapshotChanges()
         .pipe(
           finalize(() => {
             fileRef.getDownloadURL().subscribe(downloadURL => {
               this.img = downloadURL;
+              this.toastr.success("Se ha subido el fondo correctamente", 'Subir imagen', {
+                positionClass: 'toast-center-center'
+              });
             });
           })
         )
